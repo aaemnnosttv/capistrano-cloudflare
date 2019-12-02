@@ -7,19 +7,18 @@ require 'rake'
 module Capistrano
   module CloudFlare
     def self.send_request(options = {})
-      zone = options[:zone]
-      params =       {
-        :purge_everything => true,
-      }
-      headers = {
-        'Content-Type' => 'application/json',
-        'X-Auth-Email' => options[:email],
-        'X-Auth-Key' => options[:api_key]
-      }
+      headers = { 'Content-Type' => 'application/json' }
 
-      resp = HTTParty.delete(
-        "https://api.cloudflare.com/client/v4/zones/#{zone}/purge_cache",
-        :body => params.to_json,
+      if options[:api_key]
+        headers['X-Auth-Email'] = options[:email]
+        headers['X-Auth-Key']   = options[:api_key]
+      elsif options[:api_token]
+        headers['Authorization'] = "Bearer #{options[:api_token]}"
+      end
+
+      resp = HTTParty.post(
+        "https://api.cloudflare.com/client/v4/zones/#{options[:zone]}/purge_cache",
+        :body => { :purge_everything => true }.to_json,
         :headers => headers
       )
 
