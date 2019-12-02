@@ -1,10 +1,11 @@
-# Capistrano CloudFlare [![Build Status](https://secure.travis-ci.org/cramerdev/capistrano-cloudflare.png)](https://secure.travis-ci.org/cramerdev/capistrano-cloudflare)
+# Capistrano Cloudflare 
+[![Build Status](https://travis-ci.org/aaemnnosttv/capistrano-cloudflare.svg?branch=master)](https://travis-ci.org/aaemnnosttv/capistrano-cloudflare)
 
-[CloudFlare](http://www.cloudflare.com/) is a service that protects and speeds up websites. Capistrano Cloudflare provides [Capistrano](https://github.com/capistrano/capistrano/wiki/Documentation-v2.x) tasks to update your CloudFlare settings.
+[Cloudflare](http://www.cloudflare.com/) is a service that protects and speeds up websites. Capistrano Cloudflare provides [Capistrano](https://github.com/capistrano/capistrano/wiki/Documentation-v2.x) tasks to update your Cloudflare settings.
 
-Capistrano CloudFlare Version 2.0 and above supports the new Capistrano v3 API. For compatbility with Capistrano v2, please use version `0.0.2`.
+Capistrano Cloudflare Version 2.0 and above supports the new Capistrano v3 API. For compatbility with Capistrano v2, please use version `0.0.2`.
 
-This fork of the library supports CloudFlare's version 4 API
+This fork of the library supports Cloudflare's version 4 API
 
 Currently only cache purging is supported.
 
@@ -12,33 +13,50 @@ Currently only cache purging is supported.
 
 Add this line to your application's Gemfile:
 
-    gem 'capistrano-cloudflare'
+    gem 'capistrano-cloudflare', :git => 'https://github.com/aaemnnosttv/capistrano-cloudflare.git'
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install capistrano-cloudflare
-
 ## Usage
 
-When using Capistrano, add:
+Add the following line to your `Capfile`
 
-    require 'capistrano/cloudflare'
+```ruby
+require 'capistrano/cloudflare'
+```
 
-    set :cloudflare_options, {
-        :zone  => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-        :email   => 'me@example.com',
-        :api_key => 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
-    }
+### Configure `cloudflare_options` in `deploy.rb`
 
-to config/deploy.rb. Your api key can be found in your [CloudFlare account seetings](https://www.cloudflare.com/my-account). Your Zone can be determined by called the CloudFlare API [List Zones Endpoint](https://api.cloudflare.com/#zone-list-zones)
+**Using an API token**  
+_requires `cache_purge:edit` permission_
 
-The following Capistrano tasks should now be available:
+```ruby
+set :cloudflare_options, {
+    :zone      => 'yourzoneid',
+    :api_token => 'yourapitoken',
+}
+```
+
+**Using an API key**
+
+```ruby
+set :cloudflare_options, {
+    :zone    => 'yourzoneid',
+    :email   => 'me@example.com',
+    :api_key => 'yourapikey'
+}
+```
+
+See here for more information about the differences between tokens and keys:  
+https://support.cloudflare.com/hc/en-us/articles/200167836-Managing-API-Tokens-and-Keys
+
+The following Capistrano tasks should now be available when running `bundle exec cap --tasks`
 
 * `cloudflare:cache:purge`
+
+> Note these are not hooked automatically.
 
 ## Contributing
 
